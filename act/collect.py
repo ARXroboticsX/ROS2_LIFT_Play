@@ -64,11 +64,11 @@ def voice_process(voice_engine, line):
 # 根据动作和编码范围更新ready_flag
 def update_ready_flag(ready_flag, action, gripper_idx, encode_ranges):
     for idx in gripper_idx:
-        if ready_flag % 2 == 1 and action[idx] < encode_ranges['close']:
+        if ready_flag % 2 == 1 and abs(action[idx]) < abs(encode_ranges['close']):
             ready_flag += 1
 
             print(f'{ready_flag=}: {action[idx]=}')
-        elif ready_flag % 2 == 0 and encode_ranges['middle'] < action[idx] < encode_ranges['max']:
+        elif ready_flag % 2 == 0 and abs(encode_ranges['middle']) < abs(action[idx]) < abs(encode_ranges['max']):
             ready_flag += 1
 
             print(f'{ready_flag=}: {action[idx]=}')
@@ -115,11 +115,17 @@ def collect_detect(args, start_episode, voice_engine, ros_operator):
         # 机械臂准备阶段
         ready_flag = 0
         gripper_idx = [6, 13]
+        # encode_ranges = {
+        #     'close': 0.1,
+        #     'middle': 1.0,
+        #     'max': 5.0
+        # }
         encode_ranges = {
-            'close': 0.1,
-            'middle': 1.0,
-            'max': 5.0
+            'close': -0.1,
+            'middle': -2.1,
+            'max': -3.5
         }
+
 
         while ready_flag < 2 and rclpy.ok():
             obs_dict = ros_operator.get_observation()
@@ -154,7 +160,8 @@ def collect_information(args, ros_operator, voice_engine):
     # ros_operator.init_robot_base_pose()
 
     gripper_idx = [6, 13]
-    gripper_close = 3
+    # gripper_close = 3
+    gripper_close = -2.1
 
     while (count < args.max_timesteps) and rclpy.ok():
         obs_dict = ros_operator.get_observation(ts=count)
@@ -175,9 +182,9 @@ def collect_information(args, ros_operator, voice_engine):
 
         # 夹爪动作处理
         for idx in gripper_idx:
-            action[idx] = 0 if action[idx] < gripper_close else action[idx]
-        action_eef[6] = 0 if action_eef[6] < gripper_close else action_eef[6]
-        action_eef[13] = 0 if action_eef[13] < gripper_close else action_eef[13]
+            action[idx] = 0 if action[idx] > gripper_close else action[idx]
+        action_eef[6] = 0 if action_eef[6] > gripper_close else action_eef[6]
+        action_eef[13] = 0 if action_eef[13] > gripper_close else action_eef[13]
 
         # 检查是否超过100帧，并判断是否应该停止
         if count > 100:
