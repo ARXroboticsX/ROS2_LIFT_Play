@@ -13,10 +13,10 @@ arm_config:
   arm_feedback_left_topic: '/arm_l_status_full'
   arm_feedback_right_topic: '/arm_r_status_full'
 
-  follow_arm_left_cmd_topic: '/joint_control'
-  follow_arm_right_cmd_topic: '/joint_control2'
-  follow_arm_left_feedback_topic: '/joint_information'
-  follow_arm_right_feedback_topic: '/joint_information2'
+  follow_arm_left_cmd_topic: '/arm_master_l_status'
+  follow_arm_right_cmd_topic: '/arm_master_r_status'
+  follow_arm_left_feedback_topic: '/arm_slave_l_status'
+  follow_arm_right_feedback_topic: '/arm_slave_r_status'
 
 robot_base_config:
   robot_base_topic: '/body_information'
