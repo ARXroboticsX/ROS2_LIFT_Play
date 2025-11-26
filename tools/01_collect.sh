@@ -18,7 +18,7 @@ gnome-terminal --title="body" -x $shell_type -i -c "cd ../../LIFT/body/ROS2; sou
 sleep 1
 
 # Lift
-gnome-terminal --title="lift" -x $shell_type -i -c "cd ../../LIFT/ARX_X5/ROS2/X5_ws; source install/setup.bash; ros2 launch arx_x5_controller open_vr_double_arm.launch.py; $shell_exec"
+gnome-terminal --title="lift" -x $shell_type -i -c "cd ../../LIFT/ARX_X5/ROS2/X5_ws; source install/setup.bash; ros2 launch arx_x5_controller v2_pos_control.launch.py; $shell_exec"
 sleep 1
 
 # Realsense
