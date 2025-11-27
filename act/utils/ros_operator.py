@@ -174,12 +174,12 @@ class RosOperator(Node):
         # 推理模式相关发布
         if not self.in_collect:
             self.follow_arm_left_publisher = self.create_publisher(
-                self.joint_control,
+                self.robot_status,
                 self.config['arm_config']['follow_arm_left_cmd_topic'],
                 10
             )
             self.follow_arm_right_publisher = self.create_publisher(
-                self.joint_control,
+                self.robot_status,
                 self.config['arm_config']['follow_arm_right_cmd_topic'],
                 10
             )
@@ -192,7 +192,7 @@ class RosOperator(Node):
     # 推理
     def follow_arm_publish(self, left, right):
         if len(left) == 7:
-            joint_state_msg = self.joint_control()
+            joint_state_msg = self.robot_status()
         else:
             print("\033[31mERROR action\033[0m")
 
@@ -403,7 +403,7 @@ class RosOperator(Node):
 
             # JointControl topic
             if len(left_arm) == 7:
-                joint_state_msg = self.joint_control()
+                joint_state_msg = self.robot_status()
             else:
                 print("\033[31mInvalid joint length\033[0m")
 
